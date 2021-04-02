@@ -4,6 +4,7 @@ public enum MessageType {
 	CHAT,
 	CONNECT,
 	DISCONNECT,
+	GETSTORY,
 	ADDSTORY,
 	SETSTORY
 }
