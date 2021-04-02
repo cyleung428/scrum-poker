@@ -39,7 +39,7 @@ public class WebSocketEventListener {
 				.build();
 		LocalState state = LocalState.getInstance();
 		state.removeUser(username);
-		sendingOperations.convertAndSend(message);
+		sendingOperations.convertAndSend("/topic/public",message);
 	}
 
 }
