@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import com.example.scrumPoker.model.LocalState;
 import com.example.scrumPoker.model.Message;
 import com.example.scrumPoker.model.MessageType;
 
@@ -36,6 +37,8 @@ public class WebSocketEventListener {
 				.type(MessageType.DISCONNECT)
 				.sender(username)
 				.build();
+		LocalState state = LocalState.getInstance();
+		state.removeUser(username);
 		sendingOperations.convertAndSend(message);
 	}
 

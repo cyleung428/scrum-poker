@@ -6,6 +6,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
+import com.example.scrumPoker.model.LocalState;
 import com.example.scrumPoker.model.Message;
 
 @Controller
@@ -20,7 +21,8 @@ public class ChatController {
 	@SendTo("/topic/public")
 	public Message newUser(@Payload final Message chatMessage, SimpMessageHeaderAccessor headerAccessor) {
 		headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
-		
+		LocalState state = LocalState.getInstance();
+		state.addUser(chatMessage.getSender());
 		return chatMessage;
 	}
 }
