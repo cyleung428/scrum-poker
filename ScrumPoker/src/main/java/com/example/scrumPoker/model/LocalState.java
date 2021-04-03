@@ -92,9 +92,8 @@ public final class LocalState {
 	
 	public Message getResultMessage() {
 		Map<String, Object> contentMap = new HashMap<String, Object>();
-		Map<String, String> storyPointMapClone = new HashMap<String, String>();
-		storyPointMapClone.putAll(storyPointMap);
-		contentMap.put("result", storyPointMapClone);
+		contentMap.put("result", storyPointMap);
+		contentMap.put("storyName", storyMap.get(activeID).getStoryName());
 		Message message = Message.builder()
 				.type(MessageType.REVEALRESULT)
 				.content(contentMap)
