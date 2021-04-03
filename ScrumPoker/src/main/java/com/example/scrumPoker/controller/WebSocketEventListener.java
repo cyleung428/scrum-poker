@@ -1,6 +1,10 @@
 package com.example.scrumPoker.controller;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +37,14 @@ public class WebSocketEventListener {
 	public void handleWebSocketDisconnectListner(final SessionDisconnectEvent event) {
 		final StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
 		final String username = (String) headerAccessor.getSessionAttributes().get("username");
-		final Message message = Message.builder()
-				.type(MessageType.DISCONNECT)
-				.sender(username)
-				.build();
 		LocalState state = LocalState.getInstance();
 		state.removeUser(username);
-		sendingOperations.convertAndSend("/topic/public",message);
+		if (state.checkAllUserSelected()) {
+			sendingOperations.convertAndSend("/topic/public",state.getResultMessage());
+			state.clearState();
+			sendingOperations.convertAndSend("/topic/public",state.getStoryMessage());
+			
+		}
 	}
-
+	
 }

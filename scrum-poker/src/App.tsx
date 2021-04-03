@@ -25,6 +25,8 @@ interface IStory {
     active: Boolean
 }
 
+const choice = ["1", "2", "3", "5", "8", "13", "no_idea", "resign"];
+
 function App() {
     const [connect, setConnect] = useState(false);
     const [email, setEmail] = useState("");
@@ -51,7 +53,10 @@ function App() {
                     setActiveID(content.activeID);
                     setStoryList(content.storyList);
                     break;
-            }
+                case "REVEALRESULT":
+                    console.log(content);
+                    break;
+                }
         }
 
         const onConnected = () => {
@@ -71,7 +76,21 @@ function App() {
     }
 
     const onSelectStory = (id: Number) => {
-        console.log(id);
+        if (stompClient) {
+            stompClient.send("/app/chat.selectStory",
+                {},
+                JSON.stringify({ sender: email, content: id })
+            )
+        }
+    }
+
+    const onSelectStoryPoint = (storyPoint: String) => {
+        if (stompClient) {
+            stompClient.send("/app/chat.selectStoryPoint",
+                {},
+                JSON.stringify({ sender: email, content: storyPoint })
+            )
+        }
     }
     return (
         <div className={appStyles}>
@@ -98,7 +117,18 @@ function App() {
                                     </>
                                     :
                                     <>
-
+                                    <span>Active Story: {storyList.find(story=> story.id === activeID)?.storyName}</span>
+                                    {
+                                            choice.map(choice => (
+                                                <CompoundButton
+                                                    primary
+                                                    key={`${choice}`}
+                                                    onClick={() => { onSelectStoryPoint(choice) }}
+                                                >
+                                                    {choice}
+                                                </CompoundButton>
+                                            ))
+                                        }
                                     </>
                             }
                         </>
