@@ -35,7 +35,7 @@ cd scrum-poker
 npm i
 ```
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
 
 ```shell
 npm start
